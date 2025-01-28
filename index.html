@@ -4,7 +4,204 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(to right, rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.8)), url('foto.jpg') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        header .btn {
+            background: #fff;
+            color: #2575fc;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .about, .portfolio, .contact {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .about h2, .portfolio h2, .contact h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #2575fc;
+        }
+        
+        .about p {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .portfolio-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .portfolio-item {
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        
+        .portfolio-item h3 {
+            font-size: 1.0em;
+            color: #2575fc;
+            padding: 10px;
+        }
+        
+        .contact form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact input, .contact textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        .contact .btn {
+            background: #2575fc;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        
+        /* Animation Styles */
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+        
+        .slide-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        
+        .appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                font-size: 0.9rem;
+            }
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            header h1 {
+                font-size: 1.5rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            .chapter-list li {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+            nav {
+                padding: 1rem;
+                text-align: left;
+            }
+            .container {
+                margin: 0.5rem;
+                padding: 0.5rem;
+            }
+            header h1 {
+                font-size: 1.2rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -55,6 +252,46 @@
         </form>
     </section>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Smooth scrolling
+            document.querySelectorAll("a[href^='#']").forEach(anchor => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute("href")).scrollIntoView({
+                        behavior: "smooth"
+                    });
+                });
+            });
+        
+            // Fade-in and slide-up effect on scroll
+            const faders = document.querySelectorAll(".fade-in");
+            const sliders = document.querySelectorAll(".slide-in");
+        
+            const appearOptions = {
+                threshold: 0.5,
+                rootMargin: "0px 0px -100px 0px"
+            };
+        
+            const appearOnScroll = new IntersectionObserver(function (entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add("appear");
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+        
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        
+            sliders.forEach(slider => {
+                appearOnScroll.observe(slider);
+            });
+        });
+    </script>
 </body>
 </html>
